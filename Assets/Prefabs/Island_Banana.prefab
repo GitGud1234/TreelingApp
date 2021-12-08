@@ -3199,6 +3199,7 @@ MonoBehaviour:
   fruitText: {fileID: 0}
   inGameTime: 0
   TreeAge: 0
+  TreeDeathAge: 30
   treeAge: {fileID: 2070211368570776712}
   TreeType: {fileID: 2070211368354871108}
 --- !u!61 &2070211368559606567

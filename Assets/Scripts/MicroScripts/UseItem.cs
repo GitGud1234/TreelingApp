@@ -10,8 +10,8 @@ public class UseItem : MonoBehaviour {
     public static bool TreegActive;
     [SerializeField] private Image imageCoolDown;
     private bool isCD = false;
-    private float CDTime = 100.0f;
-    private float CDTimer = 0.0f;
+    public float CDTime = 100.0f;
+    public float CDTimer = 0.0f;
     public Text waterTxt,fertiliserTxt, fruitBTxt, treeGTxt;
     public GameObject active1,active2,active3,active4;
 
@@ -21,6 +21,8 @@ public class UseItem : MonoBehaviour {
        active2.SetActive(false);
        active3.SetActive(false);
        active4.SetActive(false);
+
+       //if(PlayerPrefs.HasKey("water")) CDTimer = PlayerPrefs.GetFloat("water");
     }
 
     void Update() {
@@ -36,8 +38,10 @@ public class UseItem : MonoBehaviour {
             if(isCD) applyCooldown(); 
             WaterActive = true;
             StartCoroutine(WaterTimer());
+            //PlayerPrefs.SetFloat("water", CDTimer);
             }
             waterTxt.text = "" + BuyItem.water;
+            
         }
         if(gameObject.name == "Fertiliser") {
             //print("clicked on Fertiliser");
@@ -89,6 +93,7 @@ public class UseItem : MonoBehaviour {
         else {
             //textCD.text = Mathf.RoundToInt(CDTimer).ToString();
             imageCoolDown.fillAmount = CDTimer / CDTime;
+          
         }
     }
     public void WaterUsed() {
@@ -99,6 +104,7 @@ public class UseItem : MonoBehaviour {
             BuyItem.water--;
             isCD = true;
             //textCD.gameObject.SetActive(true);
+            //waterTimer = CDTime;
             CDTimer = CDTime;
             active1.SetActive(true);
         }

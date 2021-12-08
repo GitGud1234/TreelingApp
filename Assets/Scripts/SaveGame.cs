@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SaveGame : MonoBehaviour {
-    public GameObject Banana;
-    public static int banana;
-    public GameObject Orange;
-    public static int orange;
-    public GameObject Lemon;
-    public static int lemon;
-    public GameObject Coconut;
-    public static int coconut;
-    public GameObject Cocoa;
-    public static int cocoa;
+    public GameObject Apple, Banana, Orange, Lemon, Coconut, Cocoa;
+    public static int apple, banana, orange, lemon, coconut, cocoa;
 
     void Start() {
+        //Debug.Log(Application.persistentDataPath);
+
+        apple = PlayerPrefs.GetInt("Apple", 1);
         banana = PlayerPrefs.GetInt("Banana", 0);
         orange = PlayerPrefs.GetInt("Orange", 0);
         lemon = PlayerPrefs.GetInt("Lemon", 0);
@@ -23,6 +18,17 @@ public class SaveGame : MonoBehaviour {
     }
     
     void Update() {
+        activeItems();
+        activeTrees();
+    }
+    void activeItems() {
+        //item actives
+    }
+
+    void activeTrees() {
+        if(apple == 0) Apple.SetActive(false);
+        if(apple == 1) Apple.SetActive(true);
+        
         if (banana == 0) Banana.SetActive(false);
         if (banana == 1) Banana.SetActive(true);
         

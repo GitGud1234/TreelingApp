@@ -7,15 +7,17 @@ public class BananaTree : MonoBehaviour {
     [SerializeField] private GameObject bananaGameObject, bananaTree1, bananaTree2, bananaTree3;
     [SerializeField] public BoxCollider2D fruit;
 
-    bool stage1 = false;
-    bool stage2 = false;
+    public static bool stage1 = false;
+    public static bool stage2 = false;
     public static bool stage3 = false;
+    public static bool stage4 = false;
     bool notPicked = true;
     private float RegrowFruitTimer = 60.0f;  
     private int addFruit;
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
+    public float TreeDeathAge = 30.0f;
     public Text treeAge,TreeType;
     void Start() {
         treeAge.text = "" + TreeAge + " Day old";
@@ -30,11 +32,13 @@ public class BananaTree : MonoBehaviour {
         
         if (PlayerPrefs.HasKey("BananaTree")) {
             TreeAge = PlayerPrefs.GetFloat("BananaTree");
+            inGameTime = PlayerPrefs.GetFloat("BananaTree");
         }
     }
     void Update() {
-        if (bananaGameObject == true) {
+        if (bananaGameObject) {
             inGameTime += Time.deltaTime;
+            PlayerPrefs.SetFloat("BananaTree", inGameTime);
             //print(inGameTime);
             grow();
         }
@@ -48,6 +52,7 @@ public class BananaTree : MonoBehaviour {
 
         TreeAge += 0;
         PlayerPrefs.SetFloat("BananaTree", TreeAge);
+        
     }
     void CollectFruit() {
         if(UseItem.FruitbActive) {
@@ -80,6 +85,10 @@ public class BananaTree : MonoBehaviour {
             stage2 = false;
             stage3 = true; 
         }
+        if(TreeAge >= TreeDeathAge) {
+            stage3 = false;
+            stage4 = true;
+        }
         //activates trees when conditions are met
         if (stage1) {
             fruit.enabled = false;
@@ -98,6 +107,16 @@ public class BananaTree : MonoBehaviour {
             bananaTree1.SetActive(false);
             bananaTree2.SetActive(false);
             bananaTree3.SetActive(true);
+        }
+        if(stage4) {
+            fruit.enabled = false;
+            BuyItem.banana = 0;
+            //bananaGameObject.SetActive(!bananaGameObject.activeInHierarchy);
+            //bananaGameObject.SetActive(false);
+            CancelInvoke();
+            bananaTree1.SetActive(false);
+            bananaTree2.SetActive(false);
+            bananaTree3.SetActive(false);
         }
     }
     IEnumerator growstage3() {
@@ -123,8 +142,12 @@ public class BananaTree : MonoBehaviour {
             treeAge.text = (TreeAge / 30.416 / 12).ToString("F1") + " Year old";
         }
         //Tree Death
-        //if(TreeAge >= TreeDeath) {
-        //    treeAge.text = "Reached <> Years, Tree has died";
-        //}        
+        if(TreeAge >= TreeDeathAge) {
+            treeAge.text = "Reached " + TreeAge + " Years";
+        }        
+    }
+    public void reset() {
+        TreeAge = 0;
+        InvokeRepeating("Timer", 1.0f, 1.0f);
     }
 }

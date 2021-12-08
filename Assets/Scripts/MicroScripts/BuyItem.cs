@@ -17,19 +17,28 @@ public class BuyItem : MonoBehaviour {
     void Start() {
         if (PlayerPrefs.HasKey("Fertiliser")) fertiliser = PlayerPrefs.GetInt("Fertiliser");
         if (PlayerPrefs.HasKey("FruitB")) fruitB = PlayerPrefs.GetInt("FruitB");
+        if (PlayerPrefs.HasKey("Water")) water = PlayerPrefs.GetInt("Water");
+        if (PlayerPrefs.HasKey("TreeG")) treeG = PlayerPrefs.GetInt("TreeG");
     }
     
     void Update() {
         coins = RCText.GetComponent<CoinText>().currentCoins;
+        
         fertiliserTxt.text = "" + fertiliser;
-
         fertiliser += 0;
         PlayerPrefs.SetInt("Fertiliser", fertiliser);
 
         fruitBTxt.text = "" + fruitB;
-
         fruitB += 0;
         PlayerPrefs.SetInt("FruitB", fruitB);
+
+        waterTxt.text = "" + water;
+        water += 0;
+        PlayerPrefs.SetInt("Water", water);
+
+        treeGTxt.text = "" + treeG;
+        treeG += 0;
+        PlayerPrefs.SetInt("TreeG", treeG);
     }
     public void buyWater() {
         if(coins < 5000) {
@@ -102,6 +111,7 @@ public class BuyItem : MonoBehaviour {
             coins = RCText.GetComponent<CoinText>().currentCoins -= 50000;
             apple = 1;
             //print("apple tree bought");
+            PlayerPrefs.SetInt("Apple", SaveGame.apple);
         }
         if(coins < 50000 && apple == 0) {
             //not purchased
@@ -126,6 +136,11 @@ public class BuyItem : MonoBehaviour {
         }
         if(coins > 19999 && banana == 0) {
             //purchased
+            BananaTree reset = FindObjectOfType<BananaTree>();
+            reset.reset();
+            BananaTree.stage1 = true;
+            BananaTree.stage4 = false;
+
             activateTree.activateBananaTree = true;
             coins = RCText.GetComponent<CoinText>().currentCoins -= 20000;
             banana = 1;
