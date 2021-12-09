@@ -6,35 +6,38 @@ using UnityEngine.UI;
 public class AppleTree : MonoBehaviour {
     [SerializeField] private GameObject appleGameObject, appleTree1, appleTree2, appleTree3;
     public BoxCollider2D fruit;
-    bool stage1 = false;
-    bool stage2 = false;
+    public static bool stage1 = false;
+    public static bool stage2 = false;
     public static bool stage3 = false;
+    public static bool stage4 = false;
     bool notPicked = true; 
     private float RegrowFruitTimer = 60.0f; //60.0f
     private int addFruit;
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
+    private float TreeDeathAge = 10957.5f;
+    //30 years ingame
+    //182mins realtime
     public Text treeAge,TreeType;
 
     void Start() {
         treeAge.text = "" + TreeAge + " Day old";
         TreeType.text = "Apple Tree";
-        //InvokeRepeating("Timer", 10.0f, 10.0f);
-        //Testing below
         InvokeRepeating("Timer", 1.0f, 1.0f);
-
         appleTree1.SetActive(false);
         appleTree2.SetActive(false);
         appleTree3.SetActive(false);
 
         if(PlayerPrefs.HasKey("AppleTree")) {
             TreeAge = PlayerPrefs.GetFloat("AppleTree");
+            inGameTime = PlayerPrefs.GetFloat("AppleTree");
         }
     }
     void Update() {
         if (appleGameObject) {
             inGameTime += Time.deltaTime;
+            PlayerPrefs.SetFloat("AppleTree", inGameTime);
             //print(inGameTime);
             grow();
         }
@@ -48,7 +51,6 @@ public class AppleTree : MonoBehaviour {
 
         TreeAge += 0;
         PlayerPrefs.SetFloat("AppleTree", TreeAge);
-        
     }
     public void CollectFruit() {
         if(UseItem.FruitbActive) {
@@ -85,6 +87,10 @@ public class AppleTree : MonoBehaviour {
             stage2 = false;
             stage3 = true; 
         }
+        if(TreeAge >= TreeDeathAge) {
+            stage3 = false;
+            stage4 = true;
+        }
         //activates trees when conditions are met
         if (stage1) {
             fruit.enabled = false;
@@ -102,6 +108,14 @@ public class AppleTree : MonoBehaviour {
             fruit.enabled = true;
             appleTree2.SetActive(false);
             appleTree3.SetActive(true);
+        }
+        if(stage4) {
+            fruit.enabled = false;
+            BuyItem.apple = 0;
+            CancelInvoke();
+            appleTree1.SetActive(false);
+            appleTree2.SetActive(false);
+            appleTree3.SetActive(false);
         }
     }
     IEnumerator growstage3() {
@@ -127,8 +141,12 @@ public class AppleTree : MonoBehaviour {
             treeAge.text = (TreeAge / 30.416 / 12).ToString("F1") + " Year old";
         }
         //Tree Death
-        //if(TreeAge >= TreeDeath) {
-        //    treeAge.text = "Reached <> Years, Tree has died";
-        //}        
+        if(TreeAge >= TreeDeathAge) {
+            treeAge.text = "Reached " + TreeAge + " Years";
+        }        
+    }
+    public void reset() {
+        TreeAge = 0;
+        InvokeRepeating("Timer", 1.0f, 1.0f);
     }
 }

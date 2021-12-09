@@ -94,7 +94,7 @@ public class BuyItem : MonoBehaviour {
         //costs 50k
         //should be setactive false by default, when purchased should be setactive true
         //you can only buy once and have to wait until tree expires before u can buy it again
-        apple = 1;
+        //apple = 1;
         //you start the game off with an apple tree!
         if(apple == 0) {
             activateTree.activateAppleTree = false;
@@ -107,6 +107,11 @@ public class BuyItem : MonoBehaviour {
         }
         if(coins > 49999 && apple == 0) {
             //purchased
+            AppleTree reset = FindObjectOfType<AppleTree>();
+            reset.reset();
+            AppleTree.stage1 = true;
+            AppleTree.stage4 = false;
+
             activateTree.activateAppleTree = true;
             coins = RCText.GetComponent<CoinText>().currentCoins -= 50000;
             apple = 1;
