@@ -7543,7 +7543,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &619103367
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14765,6 +14765,26 @@ PrefabInstance:
       propertyPath: ToggleIconsCollider
       value: 
       objectReference: {fileID: 260070626}
+    - target: {fileID: 3198042502395173868, guid: d1c0323f406f8454899539ab011a0fb7,
+        type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3198042502395173868, guid: d1c0323f406f8454899539ab011a0fb7,
+        type: 3}
+      propertyPath: m_FontData.m_MaxSize
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 3198042502395173868, guid: d1c0323f406f8454899539ab011a0fb7,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3198042502395173868, guid: d1c0323f406f8454899539ab011a0fb7,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3198042503137723683, guid: d1c0323f406f8454899539ab011a0fb7,
         type: 3}
       propertyPath: fruitText
@@ -24123,6 +24143,11 @@ PrefabInstance:
       propertyPath: fruitText
       value: 
       objectReference: {fileID: 165084849}
+    - target: {fileID: 2070211368559606566, guid: 308d98386cb52c94181687072827cde9,
+        type: 3}
+      propertyPath: TreeDeathAge
+      value: 2190
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -3993181072771394723, guid: 308d98386cb52c94181687072827cde9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 308d98386cb52c94181687072827cde9, type: 3}
