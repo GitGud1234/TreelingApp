@@ -5,36 +5,39 @@ using UnityEngine.UI;
 public class LemonTree : MonoBehaviour {
     [SerializeField] private GameObject lemonGameObject, lemonTree1, lemonTree2, lemonTree3;
     [SerializeField] private BoxCollider2D fruit;
-    bool stage1 = false;
-    bool stage2 = false;
+    public static bool stage1 = false;
+    public static bool stage2 = false;
     public static bool stage3 = false;
+    public static bool stage4 = false;
     bool notPicked = true;
     private float RegrowFruitTimer = 60.0f;  
     private int addFruit;
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
+    private float TreeDeathAge = 9131.25f;
+    //25 years ingame
+    //152mins realtime
     public Text treeAge,TreeType;
 
     void Start() {
         treeAge.text = "" + TreeAge + " Day old";
         TreeType.text = "Lemon Tree";
         InvokeRepeating("Timer", 1.0f, 1.0f);
-        //Testing below
-        //InvokeRepeating("Timer", 1.0f, 0.5f);
-
         lemonTree1.SetActive(false);
         lemonTree2.SetActive(false);
         lemonTree3.SetActive(false);
 
         if (PlayerPrefs.HasKey("LemonTree")) {
             TreeAge = PlayerPrefs.GetFloat("LemonTree");
+            inGameTime = PlayerPrefs.GetFloat("LemonTree");
         }
     }
 
     void Update() {
         if (lemonGameObject == true) {
             inGameTime += Time.deltaTime;
+            PlayerPrefs.SetFloat("LemonTree",inGameTime);
             //print(inGameTime);
             grow();
         } 
@@ -80,6 +83,10 @@ public class LemonTree : MonoBehaviour {
             stage2 = false;
             stage3 = true; 
         }
+        if(TreeAge >= TreeDeathAge) {
+            stage3 = false;
+            stage4 = true;
+        }
         //activates trees when conditions are met
         if (stage1) {
             fruit.enabled = false;
@@ -99,6 +106,14 @@ public class LemonTree : MonoBehaviour {
             lemonTree2.SetActive(false);
             lemonTree3.SetActive(true);
         }
+        if(stage4) {
+            fruit.enabled = false;
+            BuyItem.lemon = 0;
+            CancelInvoke();
+            lemonTree1.SetActive(false);
+            lemonTree2.SetActive(false);
+            lemonTree3.SetActive(false);
+        }
     }
     IEnumerator growstage3() {
         yield return new WaitForSeconds(RegrowFruitTimer);
@@ -108,10 +123,6 @@ public class LemonTree : MonoBehaviour {
         fruit.enabled = true; 
     }
     void Timer() {
-        //10seconds = 1 day
-        //5mins = 1month
-        //30mins = 6months
-        //1hour = 1year
         TreeAge++;
         if(TreeAge <= 30) {
             treeAge.text = "" + TreeAge + " Day old";
@@ -123,8 +134,12 @@ public class LemonTree : MonoBehaviour {
             treeAge.text = (TreeAge / 30.416 / 12).ToString("F1") + " Year old";
         }
         //Tree Death
-        //if(TreeAge >= TreeDeath) {
-        //    treeAge.text = "Reached <> Years, Tree has died";
-        //}        
+        if(TreeAge >= TreeDeathAge) {
+            treeAge.text = "Reached " + TreeAge + " Years";
+        }        
+    }
+    public void reset(){
+        TreeAge = 0;
+        InvokeRepeating("Timer", 1.0f, 1.0f);
     }
 }

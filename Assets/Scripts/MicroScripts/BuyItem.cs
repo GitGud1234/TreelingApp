@@ -153,8 +153,7 @@ public class BuyItem : MonoBehaviour {
             StartCoroutine(ChangeColor());
         }
         if(banana == 1) {
-            //already owned
-                        
+            //already owned         
         }       
     }
     public void BuyOrangeTree() {
@@ -170,12 +169,16 @@ public class BuyItem : MonoBehaviour {
         }
         if(coins > 49999 && orange == 0) {
             //purchased
+            OrangeTree reset = FindObjectOfType<OrangeTree>();
+            reset.reset();
+            OrangeTree.stage1 = true;
+            OrangeTree.stage4 = false;
+
             activateTree.activateOrangeTree = true;
             coins = RCText.GetComponent<CoinText>().currentCoins -= 50000;
             orange = 1;
             SaveGame.orange = 1;
             PlayerPrefs.SetInt("Orange", SaveGame.orange);
-            //print("apple tree bought");
         }
         if(coins < 50000 && orange == 0) {
             //not purchased
@@ -183,8 +186,7 @@ public class BuyItem : MonoBehaviour {
             StartCoroutine(ChangeColor());
         }
         if(orange == 1) {
-            //already owned
-            //print("APPLE ISLAND ALREADY OWNED");
+            //already owned do nothing
         }
     }
     public void BuyLemonTree() {
@@ -200,6 +202,11 @@ public class BuyItem : MonoBehaviour {
         }
         if(coins > 49999 && lemon == 0) {
             //purchased
+            LemonTree reset = FindObjectOfType<LemonTree>();
+            reset.reset();
+            LemonTree.stage1 = true;
+            LemonTree.stage4 = false;
+
             activateTree.activateLemonTree = true;
             coins = RCText.GetComponent<CoinText>().currentCoins -= 50000;
             lemon = 1;
@@ -228,6 +235,11 @@ public class BuyItem : MonoBehaviour {
         }
         if(coins > 19999 && coconut == 0) {
             //purchased
+            CoconutTree reset = FindObjectOfType<CoconutTree>();
+            reset.reset();
+            CoconutTree.stage1 = true;
+            CoconutTree.stage4 = false;
+
             activateTree.activateCoconutTree  = true;
             coins = RCText.GetComponent<CoinText>().currentCoins -= 20000;
             coconut = 1;
@@ -256,6 +268,11 @@ public class BuyItem : MonoBehaviour {
         }
         if(coins > 59999 && cocoa == 0) {
             //purchased
+            CocoaTree reset = FindObjectOfType<CocoaTree>();
+            reset.reset();
+            CocoaTree.stage1 = true;
+            CocoaTree.stage4 = false;
+
             activateTree.activateCocoaTree  = true;
             coins = RCText.GetComponent<CoinText>().currentCoins -= 60000;
             cocoa = 1;

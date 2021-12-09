@@ -5,35 +5,36 @@ using UnityEngine.UI;
 public class OrangeTree : MonoBehaviour {
     [SerializeField] private GameObject orangeGameObject, orangeTree1, orangeTree2, orangeTree3;
     [SerializeField] private BoxCollider2D fruit;
-    bool stage1 = false;
-    bool stage2 = false;
+    public static bool stage1 = false;
+    public static bool stage2 = false;
     public static bool stage3 = false;
+    public static bool stage4 = false;
     bool notPicked = true;
     private float RegrowFruitTimer = 60.0f;  
     private int addFruit;
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
+    private float TreeDeathAge = 9121.25f;
     public Text treeAge,TreeType;
     void Start() {
         treeAge.text = "" + TreeAge + " Day old";
         TreeType.text = "Orange Tree";
-        //InvokeRepeating("Timer", 10.0f, 10.0f);
-        //Testing below
         InvokeRepeating("Timer", 1.0f, 1.0f);
-
         orangeTree1.SetActive(false);
         orangeTree2.SetActive(false);
         orangeTree3.SetActive(false);
 
         if (PlayerPrefs.HasKey("OrangeTree")) {
             TreeAge = PlayerPrefs.GetFloat("OrangeTree");
+            inGameTime = PlayerPrefs.GetFloat("OrangeTree");
         }
     }
 
     void Update() {
         if (orangeGameObject == true) {
             inGameTime += Time.deltaTime;
+            PlayerPrefs.SetFloat("OrangeTree",inGameTime);
             //print(inGameTime);
             grow();
         }  
@@ -79,6 +80,10 @@ public class OrangeTree : MonoBehaviour {
             stage2 = false;
             stage3 = true; 
         }
+        if(TreeAge >= TreeDeathAge) {
+            stage3 = false;
+            stage4 = true;
+        }
         //activates trees when conditions are met
         if (stage1) {
             fruit.enabled = false;
@@ -98,6 +103,14 @@ public class OrangeTree : MonoBehaviour {
             orangeTree2.SetActive(false);
             orangeTree3.SetActive(true);
         }
+        if(stage4) {
+            fruit.enabled = false;
+            BuyItem.orange = 0;
+            CancelInvoke();
+            orangeTree1.SetActive(false);
+            orangeTree2.SetActive(false);
+            orangeTree3.SetActive(false);
+        }
     }
     IEnumerator growstage3() {
         yield return new WaitForSeconds(RegrowFruitTimer);
@@ -107,10 +120,6 @@ public class OrangeTree : MonoBehaviour {
         fruit.enabled = true; 
     }
     void Timer() {
-        //10seconds = 1 day
-        //5mins = 1month
-        //30mins = 6months
-        //1hour = 1year
         TreeAge++;
         if(TreeAge <= 30) {
             treeAge.text = "" + TreeAge + " Day old";
@@ -122,8 +131,12 @@ public class OrangeTree : MonoBehaviour {
             treeAge.text = (TreeAge / 30.416 / 12).ToString("F1") + " Year old";
         }
         //Tree Death
-        //if(TreeAge >= TreeDeath) {
-        //    treeAge.text = "Reached <> Years, Tree has died";
-        //}        
+        if(TreeAge >= TreeDeathAge) {
+            treeAge.text = "Reached " + TreeAge + " Years";
+        }        
+    }
+    public void reset() {
+        TreeAge = 0;
+        InvokeRepeating("Timer", 1.0f, 1.0f);
     }
 }

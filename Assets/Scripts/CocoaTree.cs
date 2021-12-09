@@ -6,29 +6,29 @@ using UnityEngine.UI;
 public class CocoaTree : MonoBehaviour {
     [SerializeField] private GameObject cocoaGameObject, cocoaTree1, cocoaTree2, cocoaTree3;
     [SerializeField] private BoxCollider2D fruit;
-    bool stage1 = false;
-    bool stage2 = false;
+    public static bool stage1 = false;
+    public static bool stage2 = false;
     public static bool stage3 = false;
+    public static bool stage4 = false;
     bool notPicked = true;
     private float RegrowFruitTimer = 60.0f;  
     private int addFruit;
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
+    private float TreeDeathAge = 3652.5f;
     public Text treeAge,treeType;
     void Start() {
         treeAge.text = "" + TreeAge + " Day old";
         treeType.text = "Cocoa Tree";
         InvokeRepeating("Timer", 1.0f, 1.0f);
-        //Testing below
-        //InvokeRepeating("Timer", 1.0f, 0.1f);
-
         cocoaTree1.SetActive(false);
         cocoaTree2.SetActive(false);
         cocoaTree3.SetActive(false);
 
         if (PlayerPrefs.HasKey("CocoaTree")) {
             TreeAge = PlayerPrefs.GetFloat("CocoaTree");
+            inGameTime = PlayerPrefs.GetFloat("CocoaTree");
         }
     }
     void Update() {
@@ -79,6 +79,10 @@ public class CocoaTree : MonoBehaviour {
             stage2 = false;
             stage3 = true; 
         }
+        if(TreeAge >= TreeDeathAge) {
+            stage3 = false;
+            stage4 = true;
+        }
         //activates trees when conditions are met
         if (stage1) {
             fruit.enabled = false;
@@ -98,6 +102,14 @@ public class CocoaTree : MonoBehaviour {
             cocoaTree2.SetActive(false);
             cocoaTree3.SetActive(true);
         }
+        if(stage4) {
+            fruit.enabled = false;
+            BuyItem.cocoa = 0;
+            CancelInvoke();
+            cocoaTree1.SetActive(false);
+            cocoaTree2.SetActive(false);
+            cocoaTree3.SetActive(false);
+        }
     }
     IEnumerator growstage3() {
         yield return new WaitForSeconds(RegrowFruitTimer);
@@ -107,10 +119,6 @@ public class CocoaTree : MonoBehaviour {
         fruit.enabled = true; 
     }
     void Timer() {
-        //10seconds = 1 day
-        //5mins = 1month
-        //30mins = 6months
-        //1hour = 1year
         TreeAge++;
         if(TreeAge <= 30) {
             treeAge.text = "" + TreeAge + " Day old";
@@ -122,8 +130,12 @@ public class CocoaTree : MonoBehaviour {
             treeAge.text = (TreeAge / 30.416 / 12).ToString("F1") + " Year old";
         }
         //Tree Death
-        //if(TreeAge >= TreeDeath) {
-        //    treeAge.text = "Reached <> Years, Tree has died";
-        //}        
+        if(TreeAge >= TreeDeathAge) {
+            treeAge.text = "Reached " + TreeAge + " Years";
+        }        
+    }
+    public void reset() {
+        TreeAge = 0;
+        InvokeRepeating("Timer", 1.0f, 1.0f);
     }
 }

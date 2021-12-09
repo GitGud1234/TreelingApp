@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class BananaTree : MonoBehaviour {
     [SerializeField] private GameObject bananaGameObject, bananaTree1, bananaTree2, bananaTree3;
     [SerializeField] public BoxCollider2D fruit;
-
     public static bool stage1 = false;
     public static bool stage2 = false;
     public static bool stage3 = false;
@@ -17,15 +16,15 @@ public class BananaTree : MonoBehaviour {
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
-    public float TreeDeathAge = 30.0f;
+    private float TreeDeathAge = 2191.5f; 
+    //6 years ingame time
+    //36mins30seconds real time
+
     public Text treeAge,TreeType;
     void Start() {
         treeAge.text = "" + TreeAge + " Day old";
         TreeType.text = "Banana Tree";
         InvokeRepeating("Timer", 1.0f, 1.0f);
-        //Testing below
-        //InvokeRepeating("Timer", 1.0f, 0.5f);
-
         bananaTree1.SetActive(false);
         bananaTree2.SetActive(false);
         bananaTree3.SetActive(false);
@@ -52,7 +51,6 @@ public class BananaTree : MonoBehaviour {
 
         TreeAge += 0;
         PlayerPrefs.SetFloat("BananaTree", TreeAge);
-        
     }
     void CollectFruit() {
         if(UseItem.FruitbActive) {
@@ -127,10 +125,9 @@ public class BananaTree : MonoBehaviour {
         fruit.enabled = true; 
     }
     void Timer() {
-        //10seconds = 1 day
-        //5mins = 1month
-        //30mins = 6months
-        //1hour = 1year
+        //1second = 1 day
+        //1min = 60 days
+        //365.25 seconds = 1 year
         TreeAge++;
         if(TreeAge <= 30) {
             treeAge.text = "" + TreeAge + " Day old";
