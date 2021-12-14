@@ -15,7 +15,7 @@ public class OrangeTree : MonoBehaviour {
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
-    private float TreeDeathAge = 9121.25f;
+    public static float TreeDeathAge = 9121f;
     public Text treeAge,TreeType;
     void Start() {
         treeAge.text = "" + TreeAge + " Day old";
@@ -48,6 +48,13 @@ public class OrangeTree : MonoBehaviour {
 
         TreeAge += 0;
         PlayerPrefs.SetFloat("OrangeTree", TreeAge);
+    }
+    public void TreeGrowth() {
+        StopCoroutine(growstage3());
+        notPicked = true;
+        stage3 = true;
+        stage2 = false;
+        fruit.enabled = true; 
     }
     void CollectFruit() {
         if(UseItem.FruitbActive) {

@@ -16,7 +16,7 @@ public class AppleTree : MonoBehaviour {
     public Text fruitText;  
     public float inGameTime;
     public float TreeAge = 0;
-    private float TreeDeathAge = 10957.5f;
+    public static float TreeDeathAge = 10960f;
     //30 years ingame
     //182mins realtime
     public Text treeAge,TreeType;
@@ -52,6 +52,13 @@ public class AppleTree : MonoBehaviour {
         TreeAge += 0;
         PlayerPrefs.SetFloat("AppleTree", TreeAge);
     }
+    public void TreeGrowth() {
+        StopCoroutine(growstage3());
+        notPicked = true;
+        stage3 = true;
+        stage2 = false;
+        fruit.enabled = true; 
+    }
     public void CollectFruit() {
         if(UseItem.FruitbActive) {
             addFruit = fruitText.GetComponent<TrackApples>().apple += Random.Range(800,1200);
@@ -62,7 +69,6 @@ public class AppleTree : MonoBehaviour {
             //print("AppleTreeScript " + addFruit);
         }
     }
-
     public void OnMouseDown() {
         if(gameObject.name == "Apple") {
             CollectFruit();
@@ -142,11 +148,14 @@ public class AppleTree : MonoBehaviour {
         }
         //Tree Death
         if(TreeAge >= TreeDeathAge) {
+            SaveGame.apple = 0;
             treeAge.text = "Reached " + TreeAge + " Years";
         }        
     }
     public void reset() {
         TreeAge = 0;
+        TreeDeathAge = 10960f;
+        inGameTime = 0;
         InvokeRepeating("Timer", 1.0f, 1.0f);
     }
 }
